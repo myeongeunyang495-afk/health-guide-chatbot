@@ -1108,3 +1108,113 @@ input:focus {
     max-height: 720px;
   }
 }
+
+/* Brand title card first */
+.brand-block {
+  order: 1;
+}
+
+.selector-panel {
+  order: 2;
+}
+
+.material-panel {
+  order: 3;
+}
+
+@media (min-width: 900px) {
+  .brand-block {
+    order: 1;
+    grid-column: 1 / -1;
+  }
+
+  .selector-panel {
+    order: 2;
+  }
+
+  .material-panel {
+    order: 3;
+  }
+}
+
+/* Bottom centered KORAIL logo */
+.global-header {
+  position: fixed;
+  top: auto;
+  right: auto;
+  bottom: 14px;
+  left: 50%;
+  z-index: 18;
+  width: auto;
+  max-width: calc(100% - 110px);
+  min-height: 54px;
+  justify-content: center;
+  transform: translateX(-50%);
+  padding: 10px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 18px 42px rgba(0, 84, 166, 0.18);
+  backdrop-filter: blur(18px);
+}
+
+.header-meta {
+  display: none;
+}
+
+.korail-logo img {
+  width: 124px;
+}
+
+.app-shell {
+  padding-bottom: 112px;
+}
+
+.floating-chat-btn {
+  bottom: 86px;
+}
+
+.chat-modal {
+  bottom: 154px;
+}
+
+@media (max-width: 720px) {
+  .global-header {
+    bottom: 12px;
+    min-height: 50px;
+    padding: 9px 16px;
+    max-width: calc(100% - 98px);
+  }
+
+  .korail-logo img {
+    width: 112px;
+  }
+
+  .app-shell {
+    padding-bottom: 112px;
+  }
+
+  .floating-chat-btn {
+    bottom: 78px;
+  }
+
+  .chat-modal {
+    bottom: 144px;
+  }
+}
+
+/* Remove decorative symbols from mode buttons */
+.mode-toggle button {
+  padding-left: 15px;
+}
+
+.mode-toggle button::before {
+  display: none;
+  content: none;
+}
+
+@media (max-width: 720px) {
+  .mode-toggle button {
+    padding-left: 13px;
+  }
+}
