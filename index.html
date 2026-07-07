@@ -8,7 +8,7 @@
   </head>
   <body>
     <header class="global-header">
-      <a class="korail-logo" href="#" aria-label="KORAIL 검진 안내자료 조회 홈">
+      <a class="korail-logo" href="#" aria-label="KORAIL 검진관리 홈">
         <img src="korail-logo.jpg" alt="KORAIL" />
       </a>
       <div class="header-meta">
@@ -27,36 +27,29 @@
         <img class="brand-visual" src="health-check-illustration.svg" alt="건강검진 상담 일러스트" />
       </section>
 
-      <section class="selector-panel" aria-labelledby="selector-title">
-        <div class="section-heading">
-          <p class="eyebrow">1단계</p>
-          <h2 id="selector-title">어떤 내용이 궁금한가요?</h2>
-        </div>
-
-        <div class="mode-toggle" role="tablist" aria-label="확인할 내용 선택">
+      <section class="selector-panel" aria-label="조회 유형과 소속 선택">
+        <div class="mode-toggle" role="tablist" aria-label="조회 유형 선택">
           <button id="guideMode" class="active" type="button" data-mode="guide" role="tab" aria-selected="true">
             <strong>소속기관 검진 안내자료 조회</strong>
-            <span>선택한 소속기관 기준으로 검진 안내자료를 확인합니다.</span>
+            <span>선택한 소속기관의 건강진단 안내자료를 확인합니다.</span>
           </button>
           <button id="specialMode" type="button" data-mode="special" role="tab" aria-selected="false">
             <strong>특수검진 대상소속 조회</strong>
-            <span>선택한 소속이 특수검진 대상인지 확인합니다.</span>
+            <span>선택한 소속의 특수검진 유해인자를 확인합니다.</span>
           </button>
         </div>
 
         <p id="modeNote" class="mode-note">⭐ 본인 소속 상관없이 전국 어디서나 건강검진이 가능합니다.</p>
 
-        <div class="step-divider"></div>
-
-        <div class="section-heading compact-heading">
-          <p class="eyebrow">2단계</p>
+        <div class="organization-group">
+          <p class="eyebrow" id="organizationStepLabel">소속 선택</p>
           <h2 id="organizationTitle">소속기관 검진 안내자료 조회</h2>
+          <label id="organizationLabel" for="organizationSelect">소속기관</label>
+          <select id="organizationSelect"></select>
+          <p id="selectionHelp" class="selection-help">선택한 소속기관의 건강진단 안내자료가 아래에 자동으로 표시됩니다.</p>
         </div>
-
-        <label id="organizationLabel" for="organizationSelect">소속기관</label>
-        <select id="organizationSelect"></select>
-        <p id="selectionHelp" class="selection-help">다음 단계에서 선택한 소속기관의 검진 안내자료가 자동으로 표시됩니다.</p>
       </section>
+
       <section class="material-panel" aria-labelledby="materialTitle">
         <div class="material-header">
           <div>
@@ -64,16 +57,15 @@
             <h2 id="materialTitle">본사 2026년 건강진단 직원 안내자료</h2>
           </div>
           <div class="material-actions">
-            <a id="previewLink" class="material-button secondary" href="#" target="_blank" rel="noopener">PDF 새 창</a>
-            <a id="downloadLink" class="material-button" href="#" download>다운로드</a>
+            <a id="downloadLink" class="material-button" href="#" download>PDF 다운로드</a>
           </div>
         </div>
 
         <div class="viewer-frame">
-          <div id="documentViewer" class="page-viewer" aria-label="건강진단 안내자료 이미지 미리보기"></div>
+          <div id="documentViewer" class="page-viewer" aria-label="검진자료 미리보기"></div>
           <div id="viewerFallback" class="viewer-fallback">
             <strong>웹앱 미리보기 안내</strong>
-            <p>소속기관을 선택하면 해당 건강진단 안내자료가 연결됩니다. 브라우저에서 바로 보이지 않으면 PDF 새 창 또는 다운로드 버튼으로 확인해 주세요.</p>
+            <p>소속기관을 선택하면 해당 자료가 화면에 표시됩니다.</p>
           </div>
         </div>
       </section>
@@ -107,10 +99,3 @@
     <script src="app.js"></script>
   </body>
 </html>
-
-
-
-
-
-
-
