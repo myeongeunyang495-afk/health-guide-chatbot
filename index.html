@@ -1,0 +1,116 @@
+﻿<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KORAIL 검진관리</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="global-header">
+      <a class="korail-logo" href="#" aria-label="KORAIL 검진 안내자료 조회 홈">
+        <img src="korail-logo.jpg" alt="KORAIL" />
+      </a>
+      <div class="header-meta">
+        <span>한국철도공사 보건관리</span>
+        <strong>KORAIL 검진관리</strong>
+      </div>
+    </header>
+
+    <main class="app-shell compact-shell">
+      <section class="brand-block" aria-labelledby="main-title">
+        <div class="brand-copy">
+          <p class="eyebrow">KORAIL Health Desk</p>
+          <h1 id="main-title">KORAIL 검진관리</h1>
+          <p class="brand-summary">검진 안내부터 유해인자 확인까지, 스마트하게 해결하세요.</p>
+        </div>
+        <img class="brand-visual" src="health-check-illustration.svg" alt="건강검진 상담 일러스트" />
+      </section>
+
+      <section class="selector-panel" aria-labelledby="selector-title">
+        <div class="section-heading">
+          <p class="eyebrow">1단계</p>
+          <h2 id="selector-title">어떤 내용이 궁금한가요?</h2>
+        </div>
+
+        <div class="mode-toggle" role="tablist" aria-label="확인할 내용 선택">
+          <button id="guideMode" class="active" type="button" data-mode="guide" role="tab" aria-selected="true">
+            <strong>소속기관 검진 안내자료 조회</strong>
+            <span>선택한 소속기관 기준으로 검진 안내자료를 확인합니다.</span>
+          </button>
+          <button id="specialMode" type="button" data-mode="special" role="tab" aria-selected="false">
+            <strong>특수검진 대상소속 조회</strong>
+            <span>선택한 소속이 특수검진 대상인지 확인합니다.</span>
+          </button>
+        </div>
+
+        <p id="modeNote" class="mode-note">⭐ 본인 소속 상관없이 전국 어디서나 건강검진이 가능합니다.</p>
+
+        <div class="step-divider"></div>
+
+        <div class="section-heading compact-heading">
+          <p class="eyebrow">2단계</p>
+          <h2 id="organizationTitle">소속기관 검진 안내자료 조회</h2>
+        </div>
+
+        <label id="organizationLabel" for="organizationSelect">소속기관</label>
+        <select id="organizationSelect"></select>
+        <p id="selectionHelp" class="selection-help">다음 단계에서 선택한 소속기관의 검진 안내자료가 자동으로 표시됩니다.</p>
+      </section>
+      <section class="material-panel" aria-labelledby="materialTitle">
+        <div class="material-header">
+          <div>
+            <p class="eyebrow" id="materialEyebrow">건강진단 안내자료</p>
+            <h2 id="materialTitle">본사 2026년 건강진단 직원 안내자료</h2>
+          </div>
+          <div class="material-actions">
+            <a id="previewLink" class="material-button secondary" href="#" target="_blank" rel="noopener">PDF 새 창</a>
+            <a id="downloadLink" class="material-button" href="#" download>다운로드</a>
+          </div>
+        </div>
+
+        <div class="viewer-frame">
+          <div id="documentViewer" class="page-viewer" aria-label="건강진단 안내자료 이미지 미리보기"></div>
+          <div id="viewerFallback" class="viewer-fallback">
+            <strong>웹앱 미리보기 안내</strong>
+            <p>소속기관을 선택하면 해당 건강진단 안내자료가 연결됩니다. 브라우저에서 바로 보이지 않으면 PDF 새 창 또는 다운로드 버튼으로 확인해 주세요.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <button id="chatTrigger" class="floating-chat-btn" aria-label="챗봇 열기" type="button">
+      <img src="ai-robot-icon.svg" alt="AI 상담" />
+    </button>
+
+    <section id="chatModal" class="chat-modal hidden" aria-labelledby="chat-title">
+      <div class="chat-header">
+        <div>
+          <p class="eyebrow">문의 입력</p>
+          <h3 id="chat-title">검진 안내 AI 상담</h3>
+        </div>
+        <div class="chat-actions">
+          <button id="resetChat" type="button">초기화</button>
+          <button id="closeChat" type="button">닫기</button>
+        </div>
+      </div>
+
+      <div id="quickQuestions" class="quick-questions" aria-label="빠른 질문"></div>
+      <div id="chatLog" class="chat-log" aria-live="polite"></div>
+
+      <form id="chatForm" class="chat-form">
+        <input id="chatInput" type="text" placeholder="예: 특수검진 대상소속은 어디서 조회하나요?" autocomplete="off" />
+        <button type="submit">문의</button>
+      </form>
+    </section>
+
+    <script src="app.js"></script>
+  </body>
+</html>
+
+
+
+
+
+
+

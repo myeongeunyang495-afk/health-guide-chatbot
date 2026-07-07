@@ -1,0 +1,14 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" role="img" aria-labelledby="title desc">
+  <title id="title">건강검진 상담</title>
+  <desc id="desc">차트와 청진기를 표현한 건강검진 안내 일러스트</desc>
+  <rect x="28" y="28" width="184" height="184" rx="36" fill="#eef6ff"/>
+  <path d="M58 70c0-12 10-22 22-22h64c12 0 22 10 22 22v98c0 12-10 22-22 22H80c-12 0-22-10-22-22V70Z" fill="#ffffff" stroke="#c9d9ea" stroke-width="4"/>
+  <path d="M82 88h60M82 110h34M82 132h52" stroke="#0054a6" stroke-width="8" stroke-linecap="round"/>
+  <rect x="82" y="150" width="52" height="18" rx="9" fill="#1d9add"/>
+  <circle cx="160" cy="152" r="30" fill="#0f8b62"/>
+  <path d="M160 136v32M144 152h32" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+  <path d="M153 62h-26a15 15 0 0 0-30 0H71v24h82V62Z" fill="#0054a6"/>
+  <circle cx="112" cy="60" r="7" fill="#ffffff"/>
+  <path d="M171 91c17 9 27 25 27 42 0 20-12 35-30 39" fill="none" stroke="#1d9add" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="168" cy="172" r="8" fill="#1d9add"/>
+</svg>
