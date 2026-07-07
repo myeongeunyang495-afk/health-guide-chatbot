@@ -1,4 +1,4 @@
-﻿const documents = {
+const documents = {
   "본사": "1. 본사_2026년 건강진단 직원 안내자료(4개병원).hwp",
   "서울본부": "2. 서울본부_2026년 건강진단 직원 안내자료(6개병원).hwp",
   "수도권동부본부": "3. 수도권동부본부_2026년건강진단 직원 안내자료(13개병원).hwp",
@@ -23,17 +23,45 @@
 
 const organizations = Object.keys(documents);
 
+const pdfPreviewOrganizations = new Set([
+  "본사",
+  "서울본부",
+  "수도권동부본부",
+  "수도권서부본부",
+  "강원본부",
+  "대전충남본부",
+  "충북본부",
+  "전북본부",
+  "광주본부",
+]);
+
+const previewPageCounts = {
+  "본사": 12,
+  "서울본부": 15,
+  "수도권동부본부": 34,
+  "수도권서부본부": 20,
+  "강원본부": 27,
+  "대전충남본부": 20,
+  "충북본부": 17,
+  "전북본부": 14,
+  "광주본부": 21,
+};
+
+const specialHazards = Object.fromEntries(
+  organizations.map((org) => [org, []]),
+);
+
 const modeConfig = {
   guide: {
     label: "소속기관",
-    organizationTitle: "소속기관 검진 안내자료 조회",
+    title: "소속기관 검진 안내자료 조회",
     help: "선택한 소속기관의 건강진단 안내자료가 아래에 자동으로 표시됩니다.",
     noteVisible: true,
   },
   special: {
     label: "대상소속",
-    organizationTitle: "특수검진 대상소속 조회",
-    help: "다음 단계에서 선택한 대상소속에 해당되는 유해인자가 자동으로 표시됩니다.",
+    title: "특수검진 대상소속 조회",
+    help: "선택한 대상소속의 특수검진 유해인자가 아래에 표시됩니다.",
     noteVisible: false,
   },
 };
@@ -53,7 +81,6 @@ const modeNote = document.querySelector("#modeNote");
 const modeButtons = document.querySelectorAll(".mode-toggle button");
 const materialEyebrow = document.querySelector("#materialEyebrow");
 const materialTitle = document.querySelector("#materialTitle");
-const previewLink = document.querySelector("#previewLink");
 const downloadLink = document.querySelector("#downloadLink");
 const documentViewer = document.querySelector("#documentViewer");
 const viewerFallback = document.querySelector("#viewerFallback");
@@ -79,25 +106,13 @@ function selectedOrganization() {
   return organizationSelect.value;
 }
 
-function hwpUrl(org) {
-  return `docs/${documents[org]}`;
-}
-
 function pdfUrl(org) {
   return `pdfs/${documents[org].replace(/\.hwp$/i, ".pdf")}`;
 }
 
-const pdfPreviewOrganizations = new Set(["본사", "서울본부", "수도권동부본부"]);
-
 function hasPdfPreview(org) {
   return pdfPreviewOrganizations.has(org);
 }
-
-const previewPageCounts = {
-  "본사": 12,
-  "서울본부": 15,
-  "수도권동부본부": 34,
-};
 
 function imagePreviewBase(org) {
   return `preview-images/${documents[org].replace(/\.hwp$/i, "")}`;
@@ -131,8 +146,34 @@ function renderImagePreview(org) {
   documentViewer.replaceChildren(...pages);
 }
 
-function previewHtmlUrl(org) {
-  return `previews/${documents[org].replace(/\.hwp$/i, ".html")}`;
+function renderHazards(org) {
+  const hazards = specialHazards[org] || [];
+  const wrapper = document.createElement("div");
+  wrapper.className = "hazard-preview";
+
+  if (!hazards.length) {
+    wrapper.innerHTML = `
+      <div class="empty-state">
+        <strong>${org} 특수검진 유해인자 자료 등록 전</strong>
+        <p>유해인자 원자료를 연결하면 이 영역에 대상 유해인자, 대상 직무, 검진 주기가 자동으로 표시됩니다.</p>
+      </div>
+    `;
+    documentViewer.replaceChildren(wrapper);
+    return;
+  }
+
+  wrapper.replaceChildren(
+    ...hazards.map((item) => {
+      const card = document.createElement("article");
+      card.className = "hazard-card";
+      card.innerHTML = `
+        <strong>${item.name}</strong>
+        <p>${item.detail}</p>
+      `;
+      return card;
+    }),
+  );
+  documentViewer.replaceChildren(wrapper);
 }
 
 function renderOrganizations() {
@@ -148,50 +189,47 @@ function setMode(mode) {
     button.setAttribute("aria-selected", String(active));
   });
   renderMode();
+  organizationSelect.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function renderMaterialPanel() {
   const org = selectedOrganization();
 
   if (currentMode === "guide") {
-    const hwp = hwpUrl(org);
-    const pdf = pdfUrl(org);
     const canPreviewPdf = hasPdfPreview(org);
     materialEyebrow.textContent = "건강진단 안내자료";
     materialTitle.textContent = `${org} 2026년 건강진단 직원 안내자료`;
-    previewLink.href = encodeURI(canPreviewPdf ? pdf : hwp);
-    previewLink.textContent = canPreviewPdf ? "PDF 새 창" : "HWP 새 창";
-    downloadLink.href = encodeURI(hwp);
-    downloadLink.download = documents[org];
+    downloadLink.href = encodeURI(pdfUrl(org));
+    downloadLink.download = documents[org].replace(/\.hwp$/i, ".pdf");
+    downloadLink.hidden = !canPreviewPdf;
+
     if (canPreviewPdf) {
       renderImagePreview(org);
     } else {
       documentViewer.replaceChildren();
     }
+
     viewerFallback.innerHTML = `
-      <strong>PDF 미리보기 안내</strong>
-      <p>${canPreviewPdf ? "선택한 기관의 안내자료가 이미지로 화면 안에 표시됩니다. PDF 새 창도 이용할 수 있습니다." : "아직 이 기관의 PDF 미리보기 파일이 없습니다. 원본 HWP 다운로드로 확인해 주세요."}</p>
+      <strong>검진 안내자료</strong>
+      <p>${canPreviewPdf ? "선택한 소속기관의 안내자료가 이미지로 표시됩니다. PDF 다운로드도 가능합니다." : "아직 이 소속기관의 PDF 파일이 없습니다. PDF가 추가되면 미리보기와 다운로드가 가능합니다."}</p>
     `;
-    previewLink.hidden = false;
-    downloadLink.hidden = false;
     return;
   }
 
-  materialEyebrow.textContent = "특수검진 대상소속";
-  materialTitle.textContent = `${org} 유해인자 조회 준비 중`;
-  previewLink.hidden = true;
+  materialEyebrow.textContent = "특수검진 유해인자";
+  materialTitle.textContent = `${org} 특수검진 유해인자`;
   downloadLink.hidden = true;
-  documentViewer.replaceChildren();
+  renderHazards(org);
   viewerFallback.innerHTML = `
-    <strong>유해인자 조회 안내</strong>
-    <p>${org}의 특수검진 대상 유해인자 자료를 연결하면 이 영역에서 자동으로 확인할 수 있습니다.</p>
+    <strong>특수검진 대상소속 조회</strong>
+    <p>${org}의 특수검진 유해인자 확인 영역입니다.</p>
   `;
 }
 
 function renderMode() {
   const config = modeConfig[currentMode];
   organizationLabel.textContent = config.label;
-  organizationTitle.textContent = config.organizationTitle;
+  organizationTitle.textContent = config.title;
   selectionHelp.textContent = `${config.help} 현재 선택: ${selectedOrganization()}`;
   modeNote.classList.toggle("hidden", !config.noteVisible);
   renderMaterialPanel();
@@ -211,18 +249,18 @@ function answerQuestion(rawQuestion) {
   const org = selectedOrganization();
 
   if (question.includes("특수") || question.includes("유해")) {
-    return `특수검진 대상소속 조회를 선택한 뒤 대상소속을 고르면 됩니다.\n다음 단계에서는 ${org}에 해당되는 유해인자가 자동으로 표시되도록 연결할 예정입니다.`;
+    return `특수검진 대상소속 조회를 선택한 뒤 대상소속을 고르면 ${org}의 유해인자 확인 영역이 표시됩니다.`;
   }
 
   if (question.includes("어디") || question.includes("전국") || question.includes("건강검진")) {
-    return "본인 소속과 관계없이 전국 어디서나 건강검진이 가능합니다.\n소속기관 검진 안내자료 조회에서 기관을 선택하면 아래에서 해당 안내자료를 미리보기하거나 다운로드할 수 있습니다.";
+    return "본인 소속과 관계없이 전국 어디서나 건강검진이 가능합니다.\n소속기관 검진 안내자료 조회에서 기관을 선택하면 안내자료를 미리보고 PDF로 다운로드할 수 있습니다.";
   }
 
   if (question.includes("안내") || question.includes("자료") || question.includes("소속")) {
-    return `현재 선택된 소속기관은 ${org}입니다.\n아래 안내자료 영역에서 미리보기 새 창 또는 다운로드 버튼으로 확인할 수 있습니다.`;
+    return `현재 선택된 소속기관은 ${org}입니다.\n아래 안내자료 영역에서 미리보기와 PDF 다운로드를 확인할 수 있습니다.`;
   }
 
-  return "먼저 확인할 내용을 선택하고, 2단계에서 소속기관 또는 대상소속을 선택해 주세요.";
+  return "먼저 조회 유형을 선택하고, 아래에서 소속기관 또는 대상소속을 선택해 주세요.";
 }
 
 function openChat() {
@@ -271,12 +309,3 @@ quickQuestionsNode.replaceChildren(
 
 renderOrganizations();
 resetChat.click();
-
-
-
-
-
-
-
-
-
